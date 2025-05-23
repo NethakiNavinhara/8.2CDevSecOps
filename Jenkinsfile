@@ -14,27 +14,27 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        sh 'npm install'
+        bat 'npm install'
       }
     }
 
     stage('Run Tests') {
       steps {
-        sh 'npm test || true'
+        bat 'npm test || exit 0'
       }
     }
 
     stage('SonarCloud Analysis') {
       steps {
         withEnv(["SONAR_TOKEN=${env.SONAR_TOKEN}"]) {
-          sh '''
-            npx sonar-scanner \
-              -Dsonar.projectKey=NethakiNavinhara_8.2CDevSecOps \
-              -Dsonar.organization=nethakinavinhara \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.login=$SONAR_TOKEN
-          '''
+          bat """
+            npx sonar-scanner ^
+              -Dsonar.projectKey=NethakiNavinhara_8.2CDevSecOps ^
+              -Dsonar.organization=nethakinavinhara ^
+              -Dsonar.sources=. ^
+              -Dsonar.host.url=https://sonarcloud.io ^
+              -Dsonar.login=%SONAR_TOKEN%
+          """
         }
       }
     }
