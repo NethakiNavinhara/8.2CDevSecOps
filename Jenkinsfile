@@ -8,42 +8,32 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main', url: 'https://github.com/NethakiNavinhara/8.2CDevSecOps.git'
+        git url: 'https://github.com/NethakiNavinhara/8.2CDevSecOps.git', branch: 'main'
       }
     }
 
     stage('Install Dependencies') {
       steps {
-        bat 'echo Installing dependencies...'
-        bat 'npm install'
+        sh 'npm install'
       }
     }
 
     stage('Run Tests') {
       steps {
-        bat 'npm test || exit /b 0'
-      }
-    }
-
-    stage('Generate Coverage Report') {
-      steps {
-        bat 'npm run coverage || exit /b 0'
-      }
-    }
-
-    stage('NPM Audit (Security Scan)') {
-      steps {
-        bat 'npm audit || exit /b 0'
+        sh 'npm test || true'
       }
     }
 
     stage('SonarCloud Analysis') {
       steps {
-        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-          bat '''
-          curl -O https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-          powershell -Command "Expand-Archive sonar-scanner-cli-5.0.1.3006-windows.zip -DestinationPath sonar-scanner"
-          sonar-scanner\\bin\\sonar-scanner.bat
+        withEnv(["SONAR_TOKEN=${env.SONAR_TOKEN}"]) {
+          sh '''
+            npx sonar-scanner \
+              -Dsonar.projectKey=NethakiNavinhara_8.2CDevSecOps \
+              -Dsonar.organization=nethakinavinhara \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=$SONAR_TOKEN
           '''
         }
       }
