@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS"  // Optional: use if your Jenkins has NodeJS configured
+       // nodejs "NodeJS"  // Optional: use if your Jenkins has NodeJS configured
     }
 
     environment {
