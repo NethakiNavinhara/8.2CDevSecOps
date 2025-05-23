@@ -2,11 +2,7 @@ pipeline {
     agent any
 
     tools {
-       // nodejs "NodeJS"  // Optional: use if your Jenkins has NodeJS configured
-    }
-
-    environment {
-        SONAR_TOKEN = credentials('sonar-token-id') // Configure in Jenkins > Credentials
+        // nodejs "NodeJS"  
     }
 
     stages {
@@ -16,17 +12,9 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
                 sh 'npm test'
-            }
-        }
-
-        stage('SonarCloud Analysis') {
-            steps {
-                withSonarQubeEnv('SonarCloud') {
-                    sh 'npx sonar-scanner'
-                }
             }
         }
     }
