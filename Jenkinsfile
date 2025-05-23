@@ -25,11 +25,12 @@ pipeline {
         }
 
         stage('SonarCloud Analysis') {
-            steps {
-                withSonarQubeEnv('SonarCloud') {
-                    bat "mvn sonar:sonar -Dsonar.projectKey=YOUR_PROJECT_KEY -Dsonar.organization=YOUR_ORG_NAME -Dsonar.login=%SONAR_TOKEN%"
-                }
+    steps {
+        withSonarQubeEnv('SonarCloud') {
+            bat "mvn sonar:sonar -Dsonar.projectKey=NethakiNavinhara_8.2CDevSecOps -Dsonar.organization=nethakinavinhara -Dsonar.login=%SONAR_TOKEN%"
             }
-        }
+         }
+      }
+
     }
 }
